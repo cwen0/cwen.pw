@@ -1,0 +1,49 @@
+{{template "header" .}}
+<body>
+{{template "nav" .}}
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>{{.Article.ConfigArticle.Title}}</h1>
+                        <span class="meta">Posted by <a href="#">{{.Article.ConfigArticle.Author}}</a> {{.Article.ConfigArticle.Date}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                 {{range .Article.ConfigArticle.Tags}}
+                    <a href="{{$.Site.URL}}/tags/{{.}}.html"><span class='glyphicon glyphicon-tags tags' aria-hidden="true" ></span>&nbsp;<span>{{.}}</span></a>
+                {{end}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {{.Article.Content}}
+                </div>
+            </div>
+
+             <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                   {{template "comment" .}}
+                </div>
+            </div>
+        </div>
+    </article>
+    
+    <hr>
+{{template "footer" .}}
+
+</body>
+
+</html>

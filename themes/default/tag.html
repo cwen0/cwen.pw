@@ -1,0 +1,46 @@
+{{template "header" .}}
+<body>
+{{template "nav" .}}
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Tag: {{.Tag}}</h1>
+                        <span>All articles with tag of {{.Tag}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {{range .Articles}}
+                    <div class="post-preview">
+                        <a href="{{$.Site.URL}}/{{.Link}}">
+                            <span>
+                            {{.ConfigArticle.Title}}
+                            </span>
+                        </a>
+                    </div>
+                {{end}}
+                </div>
+            </div>
+        </div>
+    </article>
+    
+    <hr>
+{{template "footer" .}}
+
+</body>
+
+</html>

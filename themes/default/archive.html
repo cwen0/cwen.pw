@@ -1,0 +1,45 @@
+    {{template "header" .}}
+    <body>
+    {{template "nav" .}}
+    <header class="intro-header" style="background-image: url('/static/img/contact-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>Archive</h1>
+                        <hr class="small">
+                        <span class="subheading">This is all. </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              {{range .Archives}}
+                <h2>{{.Year}}</h2>
+                {{range .Articles}}
+                <div class="post-preview">
+                    <a href="{{$.Site.URL}}/{{.Link}}">
+                        <span>
+                            {{.ConfigArticle.Title}}
+                        </span>
+                    </a>
+                </div>
+                {{end}}
+              {{end}}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+ 
+    {{template "footer" .}}
+
+</body>
+
+</html>

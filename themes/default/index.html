@@ -1,0 +1,63 @@
+{{template "header" .}}
+<body>
+{{template "nav" .}}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/static/img/home-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>{{.Site.Title}}</h1>
+                        <hr class="small">
+                        <span class="subheading">{{.Site.Introduce}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              {{range .Articles}}
+                <div class="post-preview">
+                    <a href="{{$.Site.URL}}/{{.Link}}">
+                        <h2 class="post-title">
+                            {{.ConfigArticle.Title}}
+                        </h2>
+                         <h3 class="post-subtitle">
+                            {{.Preview}}
+                        </h3>
+                    </a>
+                    <p class="post-meta">Posted by <a href="#">{{.ConfigArticle.Author}}</a> {{.ConfigArticle.Date}}</p>
+                </div>
+                <hr>
+              {{end}}
+                
+                <!-- Pager -->
+                <ul class="pager">
+                {{if .Prev}}
+                    <li class="prev">
+                        <a href="{{.Site.URL}}/{{.Prev}}">&larr; Prev</a>
+                    </li>
+                {{end}}
+                {{if .Next}}
+                    <li class="next">
+                        <a href="{{.Site.URL}}/{{.Next}}">Next &rarr;</a>
+                    </li>
+                {{end}}
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    {{template "footer" .}}
+
+
+</body>
+
+</html>
