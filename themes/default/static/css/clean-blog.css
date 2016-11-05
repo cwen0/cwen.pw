@@ -15,6 +15,10 @@ p {
 p a {
   color: #1e70bf;
 }
+img {
+    max-width:100%;
+    max-height:100%;
+}
 h1,
 h2,
 h3,

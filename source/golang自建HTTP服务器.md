@@ -10,7 +10,7 @@ tags:
 
 golang作为二十一世纪的编程语言，让我们一起看看golang是如何实现自己的http服务器 
 <!--more-->
-####go封装http服务器简单实例   
+#### go封装http服务器简单实例   
 让我们直接来看代码   
 ``` 
 package main
@@ -47,7 +47,7 @@ func ListenAndServe(addr string, handler Handler) error
 看到这里我相信大家脑子里会有很多疑惑...那么我们就接着往下探讨    
 我们先从`ListenAndServe`这个函数看起，看看它到底为我们做了什么   
 
-####ListenAndServer深入探究
+#### ListenAndServer深入探究
 我们先从源码看起 
 ```
 func ListenAndServe(addr string, handler Handler) error {
@@ -154,7 +154,7 @@ func (srv *Server) Serve(l net.Listener) error {
 ![](http://7xnp02.com1.z0.glb.clouddn.com/3.3.illustrator.png)   
 **http连接处理流程(图片摘自[go web编程](https://github.com/astaxie/build-web-application-with-golang))**     
 
-####路由处理   
+#### 路由处理   
 实际上我们在前边也多多少少谈到了路由，前面有说到实现`Handler`接口的`struct`,没错我们可以在这个`struct`的`ServeHTTP`函数中进行路由判断  
 来看下面这个例子  
 ```
