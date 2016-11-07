@@ -2,7 +2,7 @@
 
 * 一个在为成为Gopher而努力的小菜鸟
 * 喜欢Linux，喜爱自由
-* 前饿了么实习生，目前在 [pingcap](http://pingcap.com) 工作  
+* 前饿了么实习生，目前在 [pingcap](http://pingcap.com) 工作
 
 ### 关于博客
 
@@ -18,3 +18,4 @@
 ### 好友
 
 * [igouc](http://www.igouc.com) - 大学一起混了四年的小伙伴, 可爱小码农, Javaer
+* [dongxu's blog](http://0xffff.me) - 贵司CTO，各种 title, 大牛  
