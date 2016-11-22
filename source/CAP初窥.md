@@ -67,7 +67,7 @@ ACID和BASE代表了两种截然相反的设计哲学，分处一致性-可用�
 由于当前的网络硬件肯定
 会出现延迟丢包等问题，所以分区容忍性是我们必须需要实现的。
 以实际效果而言，分区相当于对通信的时限要求。系统如果不能在时限内达成数据一致性，就意味着发生了分区的情况，必须就当前操作在C和A之间做出选择
-根据定理，分布式系统只能满足三项中的两项而不可能满足全部三项。理解CAP理论的最简单方式是想象两个节点分处分区两侧。允许至少一个节点更新状态会导致数据不一致，即丧失了C性质。如果为了保证数据一致性，将分区一侧的节点设置为不可用，那么又丧失了A性质。除非两个节点可以互相通信，才能既保证C又保证A，这又会导致丧失性质。(from wiki)
+根据定理，分布式系统只能满足三项中的两项而不可能满足全部三项。理解CAP理论的最简单方式是想象两个节点分处分区两侧。允许至少一个节点更新状态会导致数据不一致，即丧失了C性质。如果为了保证数据一致性，将分区一侧的节点设置为不可用，那么又丧失了A性质。除非两个节点可以互相通信，才能既保证C又保证A，这又会导致丧失性质。(from Wikipedia)
 具体选择AP,还是CP 都是由具体场景来做决择。
 
 ## CP 栗子: 2PC(两阶段提交)
@@ -95,7 +95,7 @@ CAP 定理告诉我们, "在分区存在的情况下, 呈现完美的数据一�
 
 
 ## 参考
-1. [weiki](https://zh.wikipedia.org/wiki/CAP%E5%AE%9A%E7%90%86)
+1. [Wikipedia](https://zh.wikipedia.org/wiki/CAP%E5%AE%9A%E7%90%86)
 2. [CAP Twelve Years Later: How the "Rules" Have Changed](https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed)
 3. [CAP Theorem Distributed Systems in One Lesson](https://www.youtube.com/watch?v=gLtO0vY_M78)
 
