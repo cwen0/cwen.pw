@@ -6,8 +6,8 @@ site:
     url: http://int64.me
     comment: int64
     github: "https://github.com/cwen0"
-    facebook:
-    twitter:
+    facebook: "https://www.facebook.com/ycwlovegxq"
+    twitter: "https://twitter.com/CWenYin"
 serve:
     addr: "localhost:3000"
 
