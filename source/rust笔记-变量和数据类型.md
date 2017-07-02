@@ -1,4 +1,4 @@
-title: rust 笔记 - 变量 && 数据结构
+title: rust 笔记 - 变量 && 数据类型
 author: cwen
 date: 2017-07-02
 update: 2017-07-02
