@@ -1,4 +1,4 @@
-title: go笔记-GC
+title: go笔记 - GC
 author: cwen
 date: 2016-08-20
 update: 2016-08-20

@@ -1,4 +1,4 @@
-title: go笔记-并发
+title: go笔记 - 并发
 author: cwen
 date: 2016-11-07
 update: 2016-11-07
