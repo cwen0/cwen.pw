@@ -4,6 +4,7 @@ date: 2016-11-07
 update: 2016-11-07
 tags:
     - 笔记
+    - go
     - golang
     - gopkg
 

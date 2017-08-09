@@ -4,6 +4,7 @@ date: 2015-11-20
 update: 2015-11-20
 tags:
     - 编程
+    - go
     - golang
 
 ---
