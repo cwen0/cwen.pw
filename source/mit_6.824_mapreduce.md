@@ -5,10 +5,11 @@ update:  2017-08-04
 tags:
     - 分布式
     - MapReduce
+    - MIT-6.824
 
 ---
 
-MapReduce 由google提出的软件架构，主要用于规模数据集的并行计算... <!--more-->
+MapReduce 由google提出的软件架构，主要用于大规模数据集的并行计算... <!--more-->
 
 ## MapReduce 概念
 
