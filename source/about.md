@@ -17,6 +17,5 @@
 
 ### 友链
 
-* [igouc](http://www.igouc.com) - 大学一起混了四年的小伙伴, 可爱小码农, Javaer
-* [dongxu's blog](http://0xffff.me) - 我司CTO，各种 Title 略, 大牛
+* [int32.me](http://int32.me) - 大学一起混了四年的小伙伴, 可爱小码农
 * [PingCAP's blog](http://pingcap.com/bloglist-zh) - 我司团队技术博客
