@@ -8,6 +8,7 @@ tags:
     - TiKV
     - TiDB
     - PD
+    - 分布式数据库
 
 ---
 在 TiKV 中，PD 当发现 TiKV 实例上 region 出现 leader 不均匀的时候，会尝试将 leader 从数量比较多的地方 transfer 到其地方，具体调度指令由 PD 发出，TiKV 接收到 PD 的 transfer leader 指令，调用 raft 操作执行真正操作...  <!--more-->
