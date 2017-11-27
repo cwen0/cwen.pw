@@ -13,6 +13,7 @@ tags:
 
 ---
 
+很多数据库都会实现多版本控制（MVCC），TiKV 也不例外，刚好最近在看 TiKV，对于 MVCC 以及 TiKV 内是如何使用 MVCC 的做个简单笔记... <!--more-->
 
 ## 乐观锁和悲观锁
 ### 乐观锁
@@ -59,7 +60,7 @@ tags:
 
 MVCC - 多版本并发控制（Multi-Version Concurrency Control）, 在 MVCC 中，每当想要更改或者删除某个数据对象时，DBMS 不会在原地去删除或这修改这个已有的数据对象本身，而是创建一个该数据对象的新的版本，这样的话同时并发的读取操作仍旧可以读取老版本的数据，而写操作就可以同时进行。这个模式的好处在于，可以让读取操作不再阻塞，事实上根本就不需要锁。这是一种非常诱人的特型，以至于在很多主流的数据库中都采用了 MVCC 的实现，比如说 PostgreSQL，Oracle，Microsoft SQL Server 等。
 
-> 此处 copy 自[TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/mvcc-in-tikv/)
+> 此处 copy 自[TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/MVCC-in-TiKV/)
 
 ## MVCC in TiKV
 
@@ -105,7 +106,7 @@ rocksdb 的 cf 是一个逻辑划分数据库的能力，也就是说做到了�
 
 现在从代码看起：
 
-我们来看 tikv 的 Storage pkg，可以看到这个 pkg 里面有个 mvcc pkg，没错具体的 mvcc 操作实现就是定义在 mvcc 这个 pkg 里面。
+我们来看 TiKV 的 Storage pkg，可以看到这个 pkg 里面有个 MVCC pkg，没错具体的 MVCC 操作实现就是定义在 MVCC 这个 pkg 里面。
 
 ### 先看 Storage
 
@@ -157,14 +158,14 @@ impl Storage {
 
 可以看到 Storage 最后启动了调度器，然后不断的接受客户端指令，然后在传给 scheduler, 然后调度器执行相应的过程或者调用相应的异步函数。在调度器中有两种操作类型，读和写。
 
-### MVCC MvccReader
+### MVCC MVCCReader
 
 ```
-pub struct MvccReader {
+pub struct MVCCReader {
  ....
 }
 
-impl MvccReader{
+impl MVCCReader{
     pub fn new() {...};
     pub fn get_statistics(&self) -> &Statistics {...}
     pub fn set_key_only(&mut self, key_only: bool) {...}
@@ -184,19 +185,19 @@ impl MvccReader{
 
 ```
 
-看 MvccReader 结构很容易理解，各种读的操作。
+看 MVCCReader 结构很容易理解，各种读的操作。
 
 
 ### MVCCTxn
 
 ```
-pub struct MvccTxn {
-    reader: MvccReader,
+pub struct MVCCTxn {
+    reader: MVCCReader,
     start_ts: u64,
     writes: Vec<Modify>,
     write_size: usize,
 }
-impl MvccTxn {
+impl MVCCTxn {
     pub fn prewrite(
         &mut self,
         mutation: Mutation,
@@ -223,14 +224,14 @@ Rollback 在Prewrite 过程中出现冲突的话就会被调用。
 
 很容易发现，如果没有垃圾收集器（Gabage Collector） 来移除无效的版本的话，数据库中就会存有越来越多的 MVCC 版本。但是我们又不能仅仅移除某个 safe point 之前的所有版本。因为对于某个 key 来说，有可能只存在一个版本，那么这个版本就必须被保存下来。在TiKV中，如果在 safe point 前存在Put 或者Delete，那么说明之后所有的 writes 都是可以被移除的，不然的话只有Delete，Rollback和Lock 会被删除。
 
-> 此处部分 copy 自[TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/mvcc-in-tikv/)
+> 此处部分 copy 自[TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/MVCC-in-TiKV/)
 
 ## 参考
 
 1. [Two-phase locking](https://en.wikipedia.org/wiki/Two-phase_locking)
 2. [OCC和MVCC的区别是什么？](https://www.zhihu.com/question/60278698)
 3. [三篇文章了解 TiDB 技术内幕 - 说存储](https://pingcap.com/blog-cn/tidb-internal-1/)
-4. [TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/mvcc-in-tikv/)
+4. [TiKV 的 MVCC（Multi-Version Concurrency Control）机制](https://pingcap.com/blog-cn/MVCC-in-TiKV/)
 
 
 
