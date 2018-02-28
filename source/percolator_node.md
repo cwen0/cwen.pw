@@ -120,6 +120,7 @@ ${key,start_ts} => ${value}
 #### Prewrite
 
 ![prewrite](http://7xnp02.com1.z0.glb.clouddn.com/prewrite.jpg)
+
 > 图片 copy [雪姐 blog: Google Percolator 的事务模型](http://andremouche.github.io/transaction/percolator.html)
 
 在提交的第一个阶段：其从 Oracle 获取代表当前物理时间的全局唯一时间戳作为当前事务的 start_ts，我们首先获取所有需要写入的 cell 的 lock（考虑到 client 故障情况，我们会任意指定一个 lock 为 primary，其余的作为 secondary），每个事务都会读取 meta 数据来检测事务是否存在冲突。
@@ -135,6 +136,7 @@ ${key,start_ts} => ${value}
 #### Commit
 
 ![commit](http://7xnp02.com1.z0.glb.clouddn.com/commit.jpg)
+
 > 图片 copy [雪姐 blog: Google Percolator 的事务模型](http://andremouche.github.io/transaction/percolator.html)
 
 如果没有 cell 冲突，那么说明事务可以提交，进行下一个阶段 commit：首先 client 会向时间服务器申请一个 timestamp 作为 commit_ts，表示 commit 的时间。然后 client 会释放事务中涉及的所有 cell 的锁（清空 lock 列），释放顺序从 primary lock开始。
@@ -144,6 +146,7 @@ ${key,start_ts} => ${value}
 #### Get operation
 
 ![get](http://7xnp02.com1.z0.glb.clouddn.com/get.jpg)
+
 > 图片 copy [雪姐 blog: Google Percolator 的事务模型](http://andremouche.github.io/transaction/percolator.html)
 
 
@@ -154,6 +157,7 @@ ${key,start_ts} => ${value}
 #### clean lock
 
 ![clean lock](http://7xnp02.com1.z0.glb.clouddn.com/rollback.jpg)
+
 > 图片 copy [雪姐 blog: Google Percolator 的事务模型](http://andremouche.github.io/transaction/percolator.html)
 
 若客户端在 Commit 一个事务时，出现了异常，Prepare 时产生的锁会被留下。为避免将新事务 hang 住，Percolator 必须清理这些锁。
