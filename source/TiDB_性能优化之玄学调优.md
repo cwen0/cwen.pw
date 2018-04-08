@@ -10,7 +10,7 @@ tags:
 
 ---
 TiDB 玄学调优是我们自黑比较狠的梗之一，当初 TiKV 里大把的参数让我头疼了好久 ( TiKV 的配置参数大多数是和 RocksDB 相关 )。好在现在很多参数现在的默认值已经很科学大大的减少了我们玄学调优的难度。
-一下是是我平时在测试 TiDB 时候，进行瓶颈定位的过程... <!--more-->
+以下是是我平时在测试 TiDB 时候，进行瓶颈定位的过程... <!--more-->
 
 我们以 sysbench 测试为例，使用的测试脚本：https://github.com/pingcap/tidb-bench/tree/master/sysbench
 可用机器公共四台，机器配置：CPU 16 核 / Mem 110 GB  / Disk 1024GB SSD
