@@ -73,12 +73,14 @@ iperf -c 10.0.1.4   // client
 使用 [tidb-ansible](https://github.com/pingcap/tidb-ansible) 部署集群
 
 部署拓扑：
-|    ip      | |
-| ---------- | --- |
+
+|    ip      | 部署|
+| :----------: | :---------: |
 | 10.0.1.6   |  tidb / pd / sysbench |
 | 10.0.1.7   |  tikv |
 | 10.0.1.8   |  tikv |
 | 10.0.1.9   |  tikv |
+
 
 测试流程：prepare -> run
 
