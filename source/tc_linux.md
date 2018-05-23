@@ -29,7 +29,7 @@ TC 通过建立处理数据包队列，并定义队列中数据包被发送的�
 
 classful 队列规定（qdisc）, 类（class）和过滤器（filter）这 3 个组件组成，绘图中一般用圆形表示队列规定，用矩形表示类，图 copy 自 [Linux 下 TC 以及 netem 队列的使用](http://blog.51cto.com/professor/1570778)
 
-![](http://7xnp02.com1.z0.glb.clouddn.com/wKiom1RU0lKAEIb9AAFPHLlaSng302.jpg)
+![](http://7xnp02.com1.z0.glb.clouddn.com/wKiom1RU0lKAEIb9AAFPHLlaSng303.jpg)
 
 
 看一张图说明一下基本原理（直接 copy 自 [流量控制工具 TC 详细说明](http://www.ituring.com.cn/article/274014)：
