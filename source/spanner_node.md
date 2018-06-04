@@ -33,11 +33,11 @@ spanserver 不同于 bigtable 的地方在于，spanserver 其实更像一个完
 
 对于每个扮演领导者角色的副本，每个 spanserver 也会实施一个事务管理器来支持分布式事务。这个事务管理器被用来实现一个 participant leader，该组内的其他副本则是作为 participant slaves。如果一个事务只包含一个 Paxos 组(对于许多事务而言都是如此)，它就可以绕过事务管理器，因为锁表和 Paxos 二者一起可以保证事务性。如果一个事务包含了多 于一个 Paxos 组，那些组的领导者之间会彼此协调合作完成两阶段提交。其中一个参与者组，会被选为协调者，该组的 participant leader 被称为 coordinator leader，该组的 participant slaves 被称为 coordinator slaves。每个事务管理器的状态，会被保存到底层的 Paxos 组。目前 TiKV 的事务好像都走的是两阶段提交，不知到要是也搞个事务管理器效果会如何？
 
-### dictionary
+### directory
 
-Spanner 对具有公共前缀的键做了一个抽象，称为 dictionary。目前一个 dictionary 是数据存放的基本单位。。属于一个目录的所有数据，都具有相同的副本配置。 当数据在不同的 Paxos 组之间进行移动时，会一个目录一个目录地转移，如下图所示。Spanner 可能会移动一个目录从而减轻一个 Paxos 组的负担，也可能会把那些被频繁地一起访问的目录都放置到同一个组中，或者会把一个目录转移到距离访问者更近的地方。当客户端操作正在进行时，也可以进行目录的转移。我们可以预期在几秒内转移 50MB 的目录。
+Spanner 对具有公共前缀的键做了一个抽象，称为 directory。目前一个 directory 是数据存放的基本单位。。属于一个目录的所有数据，都具有相同的副本配置。 当数据在不同的 Paxos 组之间进行移动时，会一个目录一个目录地转移，如下图所示。Spanner 可能会移动一个目录从而减轻一个 Paxos 组的负担，也可能会把那些被频繁地一起访问的目录都放置到同一个组中，或者会把一个目录转移到距离访问者更近的地方。当客户端操作正在进行时，也可以进行目录的转移。我们可以预期在几秒内转移 50MB 的目录。
 
-dictionary 是数据复制和placement配置的基本单位。spanner中负载均衡的最小单位也是dictionary，同时提供方法MoveDir可以手动将一个dictionary移动到指定的zone
+directory 是数据复制和placement配置的基本单位。spanner中负载均衡的最小单位也是 directory，同时提供方法 MoveDir 可以手动将一个 directory 移动到指定的zone
 
 ![](http://7xnp02.com1.z0.glb.clouddn.com/1752522-192ba58099b34f11.png)
 
