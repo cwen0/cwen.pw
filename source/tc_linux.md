@@ -206,7 +206,7 @@ tc qdisc add dev eth0 root handle 1:0 netem delay 100ms
 tc qdisc add dev eth0 parent 1:1 handle 10: tbf rate 256kbit buffer 1600 limit 3000
 ```
 
-### classfule 队列
+### classful 队列
 
 这个就复杂一些，同样也特别灵活，可以限制特定的 ip 或者服务类型以及端口
 
