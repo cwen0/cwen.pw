@@ -12,7 +12,7 @@ tags:
 
 ---
 
-Chaos Mesh(https://github.com/pingcap/chaos-mesh) 是最近开源的 Kubernetes 混沌测试平台，并且最近支持了一个 TimeChaos 的新功能，用来模拟 Time skew 的情况，通常情况下，我们知道直接修在容器中修改时间，会影响整个物理节点, 这不是我们想要的，那么 Chaos Mesh 是如何解决这个问题的呢？接下来就让我们一起探索一下 Chaos Mesh 是如何在容器中让时间自由摇摆的！
+[Chaos Mesh](https://github.com/pingcap/chaos-mesh) 是最近开源的 Kubernetes 混沌测试平台，并且最近支持了一个 TimeChaos 的新功能，用来模拟 Time skew 的情况，通常情况下，我们知道直接修在容器中修改时间，会影响整个物理节点, 这不是我们想要的，那么 Chaos Mesh 是如何解决这个问题的呢？接下来就让我们一起探索一下 Chaos Mesh 是如何在容器中让时间自由摇摆的！
 <!--more-->
 
 ## Time skew 是什么
@@ -142,7 +142,7 @@ ffffffffff700e10 g    DF .text	0000000000000016  LINUX_2.6   __vdso_time
 
 上述流程图即为 Chaos Mesh 中 TimeChaos 的实现基本流程
 
-* 第一步我们会先使用 ptrace attach 都指定的 pid 进程，让当前进程处于 stop 状态 
+* 第一步我们会先使用 ptrace attach 指定的 pid 进程，让当前进程处于 stop 状态 
 * 接着使用 ptrace 在进程内存中映射出一段内存空间将我们自己的 `fake_clock_gettime` 使用 `process_vm_writev` 写到内存空间中 
 * 将指定的参数通过 `process_vm_writev` 写到 `fake_clock_gettime` 中，这里的参数是指我们真正想要注入的时间，比如往前 2h, 往后 2d 之类的参数 
 * 接着使用 ptrace 修改 VDSO 中 `clock_gettime` 函数部分，直接跳转到 `fake_clock_gettime` 函数上。 
