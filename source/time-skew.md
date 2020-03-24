@@ -12,10 +12,10 @@ tags:
 
 ---
 
-[Chaos Mesh](https://github.com/pingcap/chaos-mesh) 是最近开源的 Kubernetes 混沌测试平台，并且最近支持了一个 TimeChaos 的新功能，用来模拟 Time skew 的情况，通常情况下，我们知道直接修在容器中修改时间，会影响整个物理节点, 这不是我们想要的，那么 Chaos Mesh 是如何解决这个问题的呢？接下来就让我们一起探索一下 Chaos Mesh 是如何在容器中让时间自由摇摆的！
+[Chaos Mesh](https://github.com/pingcap/chaos-mesh) 是最近开源的 Kubernetes 混沌测试平台，并且最近支持了 TimeChaos 的新功能，用来模拟 Time skew 的情况，通常情况下，我们知道直接修在容器中修改时间，会影响整个物理节点, 这不是我们想要的，那么 Chaos Mesh 是如何解决这个问题的呢？接下来就让我们一起探索一下 Chaos Mesh 是如何在容器中让时间自由摇摆的！
 <!--more-->
 
-## Time skew 是什么
+## Time skew 是什么?
 
 Time Skew 直接翻译就是时间偏移，白话一点就是我们从节点上获取的时间和当前真实的时间出现偏差。
 
@@ -150,6 +150,83 @@ ffffffffff700e10 g    DF .text	0000000000000016  LINUX_2.6   __vdso_time
 
 具体实现可以参考：https://github.com/pingcap/chaos-mesh/blob/master/pkg/time/time_linux.go  
 
-## 最后 
+
+## 看一下效果
+
+这里我直接拿 TiDB 作为小白鼠，在 TiDB 中采用集中式的服务 TSO 来获取全局一直的版本号，并保证事务的版本号单调递增的。
+并且 TSO 服务是由 PD 负责的，这里我会随机选择一 PD 节点，定期注入 TimeChaos, 将时间往前调整 10m, 来检验一下 TiDB 是否还能正常工作😏。
+为了更好观察实验效果，实验中使用 [bank](https://github.com/cwen0/bank) 作为 TiDB 的 Workload, bank 程序模拟银行转账, 常用来验证事务的正确性。
+
+[Chaos Mesh](https://github.com/pingcap/chaos-mesh/wiki) 和 [TiDB](https://pingcap.com/docs/stable/tidb-in-kubernetes/tidb-operator-overview/) 的安装流程可以参考具体文档，这里不在多加赘述。 
+
+先看一下具体实验配置： 
+
+```yaml
+apiVersion: pingcap.com/v1alpha1
+kind: TimeChaos
+metadata:
+  name: time-skew-example
+  namespace: tidb-demo
+spec:
+  mode: one
+  selector:
+    labelSelectors:
+      "app.kubernetes.io/component": "pd"
+  timeOffset:
+    sec: -600
+  clockIds:
+    - CLOCK_REALTIME
+  duration: "10s"
+  scheduler:
+    cron: "@every 1m"
+```
+
+执行上述实验，Chaos Mesh 会每隔 1m 选中一个 PD pod 注入 TimeChaos 并持续 10s, 在这 10s 内，
+PD 获取的时间会和真实的时间相差 600s。具体实验定义可以参考 Chaos Mesh [Wiki](https://github.com/pingcap/chaos-mesh/wiki/Time-Chaos).
+
+我们可以通过 `kubectl apply` 命令创建 TimeChaos 实验： 
+
+```bash
+kubectl apply -f pd-time.yaml
+```
+
+成功创建实验后，就到了检验结果的时候了，我们可以通过下列命令去检索 PD 的日志: 
+
+```bash
+kubectl logs -n tidb-demo tidb-app-pd-0 | grep "system time jump backward"
+```
+
+得到如下输出： 
+
+```bash
+[2020/03/24 09:06:23.164 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585041383060109693]
+[2020/03/24 09:16:32.260 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585041992160476622]
+[2020/03/24 09:20:32.059 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585042231960027622]
+[2020/03/24 09:23:32.059 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585042411960079655]
+[2020/03/24 09:25:32.059 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585042531963640321]
+[2020/03/24 09:28:32.060 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585042711960148191]
+[2020/03/24 09:33:32.063 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043011960517655]
+[2020/03/24 09:34:32.060 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043071959942937]
+[2020/03/24 09:35:32.059 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043131978582964]
+[2020/03/24 09:36:32.059 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043191960687755]
+[2020/03/24 09:38:32.060 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043311959970737]
+[2020/03/24 09:41:32.060 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043491959970502]
+[2020/03/24 09:45:32.061 +00:00] [ERROR] [systime_mon.go:32] ["system time jump backward"] [last=1585043731961304629]
+...
+``` 
+
+从日志中可以看出，每隔一段时间，PD 就会检测出系统时间会退的信息，由此可以说明两个问题： 
+
+1. TimeChaos 生效了 
+2. PD 实现中考虑到 Time skew 的情况
+
+最后通过 Chaos-Dashboard 再次确认一下 TimeChaos 对 TiDB 的影响:
+
+![pd TimeChaos](../images/time-skew.png)
+
+从监控中可以看到，每隔 1m 会注入一次 TimeChaos 并持续 10s，
+并且注入的 TimeChaos 对 TiDB 几乎无影响，bank 程序正常运行，并且性能也基本没有变化。
+
+## 最后
 
 最后说点啥呢？欢迎大家入坑 [Chaos Mesh](https://github.com/pingcap/chaos-mesh)
