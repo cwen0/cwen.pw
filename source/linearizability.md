@@ -256,14 +256,7 @@ A5B：r1 [x] ... r2 [y] ... w1 [y] ... w2 [x] ...（c1 and c2 occur）（写偏�
 
 上面以及描述了不同的异常情况，通常我们根据这些异常情况定义了一些隔离级别： 
 
-| | P0 | P1 | P2 | P3 | P4 | P4C | A5A | A5B |
-| ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| Read Uncommitted | NP | P | P | P | P | P | P | P |
-| Read Committed | NP | NP | P | P | P | P | P | P |
-| Cursor Stability | NP | NP | SP | P | SP | NP | P | SP |
-| Repeatable Read | NP | NP | NP | P | NP | NP | NP | NP |
-| Read Committed | NP | NP | NP | SP | NP | NP | NP | P |
-| Read Committed | NP | NP | NP | NP | NP | NP | NP | NP |
+![image](../images/isolation.png)
 
 > NP - Not Possible，在该隔离级别下面不可能发生  
 > SP - Sometimes Possible，在该隔离级别下面有时候可能发生     
