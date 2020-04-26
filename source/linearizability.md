@@ -296,7 +296,7 @@ Linearizability 和 Serializability 很多时候会发生混淆，这两个词�
  [Knossos](https://github.com/jepsen-io/knossos) 是 Jepsen 中使用的一致性验证工具，是基于 [WGL](http://www.cs.cmu.edu/~wing/publications/WingGong93.pdf) 算法实现的,这个算法主要是在 WG
  算法的基础的一个改进，改进的方式主要是**对搜索树的剪枝：通过缓存已经见过的配置，来减少重复搜索**，具体关于 Knossos 可以参考 [Linearizability 一致性验证](https://pingcap.com/blog-cn/linearizability/#linearizability-%E4%B8%80%E8%87%B4%E6%80%A7%E9%AA%8C%E8%AF%81) 博客。
  
- #### Porcupine 
+#### Porcupine 
  
  [Porcupine](https://github.com/anishathalye/porcupine) 
  一个用 Go 写的更快的线性一致性验证工具。是基于 [P-compositionality](http://www.kroening.com/papers/forte2015-li.pdf) 算法，P-compositionality 算法利用了线性一致性的 Locality 原理，即**如果一个调用历史的所有子历史都满足线性一致性，那么这个历史本身也满足线性一致性**。因此，可以将一些不相关的历史划分开来，形成多个规模更小的子历史，转而验证这些子历史的线性一致性，例如kv数据结构中对不同key的操作。上面提到了算法的计算时间随着历史规模的增加急速膨胀，P-compositionality 相当于用**分治**的办法来降低历史规模，这种方法在可以划分子问题的场景下会非常有用。
