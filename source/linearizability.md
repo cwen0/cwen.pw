@@ -7,7 +7,6 @@ tags:
     - Serializability
     - CAP
     - 分布式
-    - 
 
 ---
 
