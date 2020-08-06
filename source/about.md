@@ -1,8 +1,8 @@
 ### 我是谁 ？
 
-* 喜欢Linux，喜爱自由
+* 喜欢 Linux，喜爱自由
 * 在饿了么呆过几个月
-* 现在， 在 [pingcap](http://pingcap.com) 搬砖
+* 现在， 在 [PingCAP](http://pingcap.com) 搬砖
 
 ### 关于博客
 
